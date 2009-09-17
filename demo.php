@@ -43,7 +43,7 @@ echo spritemeNav("demo");
 </table>
 </div><div class="btn_bottom"><div></div></div></div>
 
-<div style="width: 500px; font-size: 1.1em; text-align: center;">
+<div style="width: 560px; font-size: 1.1em; text-align: center;">
   <div style="float: left; background: url(images/prev-10x11-transp.gif) no-repeat 0 70%; padding-left: 14px;"><a class=ahover href="javascript:prev()">prev</a></div>
   <div style="float: right; background: url(images/next-10x11-transp.gif) no-repeat 100% 70%; padding-right: 14px;"><a class=ahover href="javascript:next()">next</a></div>
   <span id=curstep></span>
