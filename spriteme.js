@@ -353,8 +353,8 @@ SpriteMe.showSpritemePanel = function() {
 
 	sHtml = 
 	'<div id=spritemetitlebar class=spritemetitlebar>' +
-	'<a href="javascript:SpriteMe.toggleMin(1)" title="minimize"><img border=0 src="http://stevesouders.com/dev/spriteme/images/minimize-10x11-t.png"></a>' +
-	'<a href="javascript:SpriteMe.closeSpriteMe()" style="padding-left: 4px;" title="close"><img border=0 src="http://stevesouders.com/dev/spriteme/images/close-10x11-t.png"></a>' + 
+	'<a href="javascript:SpriteMe.toggleMin(1)" title="minimize"><img border=0 src="http://spriteme.org/images/minimize-10x11-t.png"></a>' +
+	'<a href="javascript:SpriteMe.closeSpriteMe()" style="padding-left: 4px;" title="close"><img border=0 src="http://spriteme.org/images/close-10x11-t.png"></a>' + 
 	'</div>' +
 	'<div style="padding: 2px 8px 0 8px;">' +
 	'<div style="float: right; text-align: right; margin-bottom: 4px; padding: 2px 0 2px 0; background: transparent;">' +
