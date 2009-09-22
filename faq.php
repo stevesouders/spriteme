@@ -50,8 +50,8 @@ $gFaqs = array(
 					 "Using sprites reduces the number of HTTP requests in the page. This is one of technique for <a href='http://developer.yahoo.net/blog/archives/2007/04/rule_1_make_few.html'>making web pages faster</a>. This is especially important for users with slow Internet connections or who are far away from your servers. Also, some browsers, including Internet Explorer 6 and 7, can only make two HTTP requests in parallel (to the same server). If the page has multiple background images, they are downloaded sequentially, resulting in a slow page.",
 					 "why"),
 
-			   array("Do many web sites use CSS sprites?",
-					 "The use of CSS sprites is growing. In 2007, only two of the Alexa top ten U.S. web sites used sprites. Today (2009) nine of the top ten sites use sprites. It's a recognized technique for speeding up web pages.",
+			   array("Do many web sites use CSS sprites? Does it make much difference?",
+					 "The use of CSS sprites is growing. In 2007, only two of the Alexa top ten U.S. web sites used sprites. Today (2009) nine of the top ten sites use sprites. It's a recognized technique for speeding up web pages. And yet, many popular sites that could benefit from sprites don't use them. As of September 2009, here is a list of web sites with the number of HTTP requests that could be eliminated if they used sprites: <a href='http://www.cnn.com/'>CNN</a> (30), <a href='http://www.ebay.com/'>eBay</a> (21), <a href='http://online.wsj.com/home-page'>WSJ</a> (39), and <a href='http://www.usps.com/'>USPS</a> (37).",
 					 "popular"),
 
 			   array("What's a bookmarklet? Why did you create SpriteMe as a bookmarklet?",
