@@ -63,7 +63,7 @@ $gFaqs = array(
 					 "testing"),
 
 			   array("What's the \"share your results\" link do?",
-					 "Sharing your results records SpriteMe's savings. These results are visible in the <a href='results.php'>savings</a> page. The results that are saved are the URL (minus any querystring), the number of background images and their total size <i>before</i> SpriteMe was run, and the number of background images and total size <i>after</i> SpriteMe was run. No personal information is saved. The IP address is not saved.",
+					 "Sharing your results records SpriteMe's savings. These results are visible in the <a href='results.php'>savings</a> page. The results that are saved are the URL (minus any querystring), the number of background images and their total size <i>before</i> SpriteMe was run, and the number of background images and total size <i>after</i> SpriteMe was run. No personal information is saved. The IP address is not saved. <em style='color: #900'>Do not share your results if you do not want other people to see your page's URL!</em>",
 					 "share"),
 
 			   array("Why aren't JPEG images sprited by SpriteMe?",
