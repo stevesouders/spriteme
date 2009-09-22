@@ -66,6 +66,10 @@ $gFaqs = array(
 					 "Sharing your results records SpriteMe's savings. These results are visible in the <a href='results.php'>savings</a> page. The results that are saved are the URL (minus any querystring), the number of background images and their total size <i>before</i> SpriteMe was run, and the number of background images and total size <i>after</i> SpriteMe was run. No personal information is saved. The IP address is not saved.",
 					 "share"),
 
+			   array("Why aren't JPEG images sprited by SpriteMe?",
+					 "Currently, SpriteMe has no knowledge of the number of colors uesd by each image. It's important to stay within the 255 color limit to minimize image file size. Creating sprites that combine jpegs with other images typically results in a significant increase in file size. It's possible that jpegs could be combined together and with other truecolor images. See <a href='http://code.google.com/p/spriteme/issues/detail?id=69'>issue #69</a>.",
+					 "jpeg"),
+
 			   array("Is SpriteMe open source?",
 					 "Yes. It's licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0'>Apache License, Version 2.0.",
 					 "opensource"),
