@@ -1092,7 +1092,7 @@ SpriteMe.prettySavings = function(bUpdate) {
 				"size increased by " + SpriteMe.prettySize((-1)*SpriteMe.savedSize) + "K" ) );
 	}
 	else if ( 0 < SpriteMe.suggestedSpriteCntr ) {
-		sSavings += SpriteMe.suggestedSpriteCntr + " sprite suggestions";
+		sSavings += SpriteMe.suggestedSpriteCntr + " sprite suggestion" + ( 1 < SpriteMe.suggestedSpriteCntr ? "s" : "" );
 	}
 	else if ( 0 === SpriteMe.suggestedSpriteCntr ) {
 		sSavings += "no sprite suggestions";
