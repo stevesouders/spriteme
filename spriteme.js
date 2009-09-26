@@ -120,7 +120,7 @@ SpriteMe.exportCSS = function() {
 						elemObj.bExported = true;
 					}
 					else if ( 1 < aRules.length ) {
-						alert("Surprize! Multiple rules for the same bg image! " + elemObj.oldBgImage);
+						SpriteMe.dprint(0, "Surprize! Multiple rules for the same bg image! " + elemObj.oldBgImage);
 					}
 					else {
 						var ruleObj = aRules[0];
@@ -165,7 +165,7 @@ SpriteMe.exportCSS = function() {
 	if ( sExport ) {
 		var exportWin = window.open("", "_blank");
 		exportWin.document.open();
-		exportWin.document.writeln("<div style='color: #333;'>" + sExport + "</div>");
+		exportWin.document.write("<div style='color: #333;'>" + sExport + "</div>");
 		exportWin.document.close();
 	}
 	else {
@@ -177,8 +177,8 @@ SpriteMe.exportCSS = function() {
 SpriteMe.formatRuleChanges = function(hChanges, url, title) {
 	var sHtml = "";
 	if ( "undefined" != typeof(hChanges[url]) ) {
-		sHtml = "<div style='font-weight: bold; font-size: 1.2em; margin-bottom: 4px;'>" + ( title ? title : url ) + "</div>" +
-			"<div>" + hChanges[url] + "</div>\n";
+		sHtml = "<div style='font-weight: bold; font-size: 1.2em; margin-bottom: 4px;'>" + ( title ? title : url ) + "</div>\n" +
+			"<div>" + hChanges[url] + "</div>\n\n";
 	}
 
 	return sHtml;
