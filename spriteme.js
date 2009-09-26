@@ -124,16 +124,18 @@ SpriteMe.exportCSS = function() {
 					}
 					else {
 						var ruleObj = aRules[0];
-
-						// Actually change the active rule. Cool!
-						// TODO - Do this **INSTEAD OF** changing each element's style so we can verify we found the right rules.
-						ruleObj.rule.style.backgroundImage = bgImage;
-						ruleObj.rule.style.backgroundPosition = bgPos;
-						if ( "undefined" === typeof(hChanges[ruleObj.url]) ) {
-							hChanges[ruleObj.url] = "<div style='margin-left: 20px; margin-bottom: 8px;'>Merge these changes into the CSS rules in <a href='" + ruleObj.url + "' target='_blank'>" + ruleObj.url + "</a>:</div><div style='border: 1px solid; color: #555; background: #F0F0F0; margin-left: 40px; padding: 8px; margin-bottom: 16px;'>"; // need to close this DIV
+						if ( ! ruleObj.bExported ) {
+							// Actually change the active rule. Cool!
+							// TODO - Do this **INSTEAD OF** changing each element's style so we can verify we found the right rules.
+							ruleObj.rule.style.backgroundImage = bgImage;
+							ruleObj.rule.style.backgroundPosition = bgPos;
+							if ( "undefined" === typeof(hChanges[ruleObj.url]) ) {
+								hChanges[ruleObj.url] = "<div style='margin-left: 20px; margin-bottom: 8px;'>Merge these changes into the CSS rules in <a href='" + ruleObj.url + "' target='_blank'>" + ruleObj.url + "</a>:</div><div style='border: 1px solid; color: #555; background: #F0F0F0; margin-left: 40px; padding: 8px; margin-bottom: 16px;'>"; // need to close this DIV
+							}
+							hChanges[ruleObj.url] += ruleObj.getHtml();
+							elemObj.bExported = true;
+							ruleObj.bExported = true;
 						}
-						hChanges[ruleObj.url] += ruleObj.getHtml();
-						elemObj.bExported = true;
 					}
 				}
 			}
