@@ -1,3 +1,188 @@
+SpriteMe = {}; // CVSNO
+SpriteMe.hBgImageRules = {}; // a hash of arrays - hash key is the bg image URL
+SpriteMe.hBgPosRules = {};   // a hash of arrays - hash key is the bg position string
+SpriteMe.exportCSS = function() {
+	if ( 0 === SpriteMe.nCreatedSprites ) {
+		alert("Make some sprites first, and then you can export the CSS changes.");
+		return;
+	}
+
+
+	var hChanges = {}; // hash of strings where the hash key is the stylesheet's URL
+
+
+	// Iterate through every DOM element that has a bg image that is now in a sprite.
+	// Check if the background-image is part of the element's inline style (no rules).
+	var bSecondPass = false;
+	var sInlineChanges;
+	for ( var i = 0; i < SpriteMe.aSprites.length; i++ ) {
+		var spriteObj = SpriteMe.aSprites[i];
+		if ( spriteObj.spriteUrl ) {
+			for ( var e = 0; e < spriteObj.bgImages[0].imgElements.length; e++ ) {
+				var elemObj = spriteObj.bgImages[0].imgElements[e];
+				if ( elemObj.oldBgImageInline ) {
+					if ( "undefined" === typeof(sInlineChanges) ) {
+						sInlineChanges = "<div style='margin-left: 20px; margin-bottom: 8px;'>Merge these changes into the <code>style</code> attribute for these elements in the page:</div><div style='border: 1px solid; color: #555; background: #F0F0F0; margin-left: 40px; padding: 8px; margin-bottom: 16px;'>";
+					}
+					sInlineChanges += elemObj.getCssHtml();
+					elemObj.bExported = true;
+				}
+				else {
+					// If an element had a bg image but it was not an inline style,
+					// then we have to do the second pass.
+					bSecondPass = true;
+				}
+			}
+		}
+	}
+	if ( "undefined" != typeof(sInlineChanges) ) {
+		sInlineChanges += "</div>";
+	}
+
+	if ( bSecondPass ) {
+		var aStylesheets = SpriteMe.doc.styleSheets;
+
+		// Create an element that we can use to get the browser's post-processed format for backgroundImage.
+		var tempdiv = SpriteMe.doc.createElement('div');
+		tempdiv.style.display = "none";
+		SpriteMe.doc.body.appendChild(tempdiv); // you have to append it for IE
+
+		// Loop through each stylesheet.
+		var hRestrictedStylesheets = {};
+		for ( var i = 0; i < aStylesheets.length; i++ ) {
+			var stylesheet = aStylesheets[i];
+			var url = ( stylesheet.href ? stylesheet.href : SpriteMe.doc.location );
+			var aRules = [];
+			try {
+				aRules = ( SpriteMe.bIE ? stylesheet.rules : stylesheet.cssRules );
+			}
+			catch(err) {
+				hRestrictedStylesheets[url] = true;
+			}
+
+			// Loop through each rule
+			for ( var r = 0, nRules = aRules.length; r < nRules; r++ ) {
+				var rule = aRules[r];
+				var bgPos = rule.style.backgroundPosition;
+				var bgImage = rule.style.backgroundImage;
+				if ( -1 != rule.selectorText.indexOf('spriteme') ) {
+					// don't analyze SpriteMe rules
+					continue;
+				}
+
+				if ( bgPos ) {
+					if ( "undefined" === typeof(SpriteMe.hBgPosRules[bgPos]) ) {
+						SpriteMe.hBgPosRules[bgPos] = [];
+					}
+					SpriteMe.hBgPosRules[bgPos][ SpriteMe.hBgPosRules[bgPos].length ] = new SpriteMe.CssRule(rule, url);
+				}
+
+				if ( bgImage && "none" != bgImage ) {
+					SpriteMe.setStyleAndUrl(tempdiv, "backgroundImage", bgImage);
+					var bgImageKey = SpriteMe.getStyleAndUrl(tempdiv, "backgroundImage");
+					if ( "undefined" === typeof(SpriteMe.hBgImageRules[bgImageKey]) ) {
+						SpriteMe.hBgImageRules[bgImageKey] = [];
+					}
+					SpriteMe.hBgImageRules[bgImageKey][ SpriteMe.hBgImageRules[bgImageKey].length ] = new SpriteMe.CssRule(rule, url);
+				}
+
+			} // end rule loop
+		} // end stylesheet loop
+
+		// In Firefox, x-domain stylesheets are restricted. Build a list of these stylesheets.
+		var sRestrictedStylesheets = "";
+		for ( var sUrl in hRestrictedStylesheets ) {
+			if ( hRestrictedStylesheets.hasOwnProperty(sUrl) ) {
+				sRestrictedStylesheets += ( sRestrictedStylesheets ? ",<br>" : "" ) + sUrl;
+			}
+		}
+
+		// Iterate through every DOM element that has a bg image.
+		for ( var i = 0; i < SpriteMe.aSprites.length; i++ ) {
+			var spriteObj = SpriteMe.aSprites[i];
+			if ( spriteObj.spriteUrl ) {
+				for ( var e = 0; e < spriteObj.bgImages[0].imgElements.length; e++ ) {
+					var elemObj = spriteObj.bgImages[0].imgElements[e];
+					if ( elemObj.bExported ) {
+						continue;
+					}
+					var bgPos = SpriteMe.getStyleAndUrl(elemObj.elem, "backgroundPosition");
+					var bgImage = SpriteMe.getStyleAndUrl(elemObj.elem, "backgroundImage");
+					var aRules = SpriteMe.hBgImageRules[elemObj.oldBgImage];
+					if ( ! aRules ) {
+						if ( "undefined" === typeof(hChanges["restricted"]) ) {
+							hChanges["restricted"] = 
+								"<div style='margin-left: 20px; margin-bottom: 8px;'>The rules for these CSS changes could not be found. " +
+								( -1 != navigator.userAgent.indexOf("Firefox") ? "This is most likely because Firefox restricts DOM access to cross-domain stylesheets. " : "" ) +
+								"Merge these changes into the CSS rules in these stylesheets. To help find the rules that need to be updated, the following clues are provided: the tag of the element, the id and class (when available), and the original background-image.</div><div style='border: 1px solid; color: #555; background: #F0F0F0; margin-left: 40px; padding: 8px; margin-bottom: 16px;'>"; // need to close this DIV
+						}
+						hChanges["restricted"] += elemObj.getCssHtml(true);
+						elemObj.bExported = true;
+					}
+					else if ( 1 < aRules.length ) {
+						alert("Surprize! Multiple rules for the same bg image! " + elemObj.oldBgImage);
+					}
+					else {
+						var ruleObj = aRules[0];
+
+						// Actually change the active rule. Cool!
+						// TODO - Do this **INSTEAD OF** changing each element's style so we can verify we found the right rules.
+						ruleObj.rule.style.backgroundImage = bgImage;
+						ruleObj.rule.style.backgroundPosition = bgPos;
+						if ( "undefined" === typeof(hChanges[ruleObj.url]) ) {
+							hChanges[ruleObj.url] = "<div style='margin-left: 20px; margin-bottom: 8px;'>Merge these changes into the CSS rules in <a href='" + ruleObj.url + "' target='_blank'>" + ruleObj.url + "</a>:</div><div style='border: 1px solid; color: #555; background: #F0F0F0; margin-left: 40px; padding: 8px; margin-bottom: 16px;'>"; // need to close this DIV
+						}
+						hChanges[ruleObj.url] += ruleObj.getHtml();
+						elemObj.bExported = true;
+					}
+				}
+			}
+		}
+	}
+
+	if ( "undefined" != typeof(sInlineChanges) ) {
+		// Concatenate the inline style changes with the inline rule changes.
+		hChanges[SpriteMe.doc.location] = sInlineChanges + hChanges[SpriteMe.doc.location];
+	}
+
+	var sExport = "";
+	if ( "undefined" != typeof(hChanges[SpriteMe.doc.location]) ) {
+		// do the document first
+		sExport += SpriteMe.formatRuleChanges(hChanges, SpriteMe.doc.location) + "</div>\n";
+	}
+	for ( var cssUrl in hChanges ) {
+		if ( hChanges.hasOwnProperty(cssUrl) && cssUrl != SpriteMe.doc.location && cssUrl != "restricted" ) {
+			sExport += SpriteMe.formatRuleChanges(hChanges, cssUrl) + "</div>\n";
+		}
+	}
+	if ( "undefined" != typeof(hChanges["restricted"]) ) {
+		// do "restricted" last
+		sExport += SpriteMe.formatRuleChanges(hChanges, "restricted", sRestrictedStylesheets) + "</div>\n";
+	}
+
+	if ( sExport ) {
+		var exportWin = window.open("", "_blank");
+		exportWin.document.open();
+		exportWin.document.writeln("<div style='color: #333;'>" + sExport + "</div>");
+		exportWin.document.close();
+	}
+	else {
+		alert("No CSS changes were found.");
+	}
+};
+
+
+SpriteMe.formatRuleChanges = function(hChanges, url, title) {
+	var sHtml = "";
+	if ( "undefined" != typeof(hChanges[url]) ) {
+		sHtml = "<div style='font-weight: bold; font-size: 1.2em; margin-bottom: 4px;'>" + ( title ? title : url ) + "</div>" +
+			"<div>" + hChanges[url] + "</div>\n";
+	}
+
+	return sHtml;
+};
+
+
 /*
  * jQuery JavaScript Library v1.3.2
  * http://jquery.com/
@@ -72,7 +257,7 @@ jQuery.ui||(function(c){var i=c.fn.remove,d=c.browser.mozilla&&(parseFloat(c.bro
  * limitations under the License.
  */
 
-SpriteMe = {};
+//CVSNO SpriteMe = {};
 
 SpriteMe.bgImageCntr = SpriteMe.spriteCntr = 0;
 SpriteMe.nBgImagesBefore = 0;   // # of bg images in the page before spriting
@@ -83,6 +268,7 @@ SpriteMe.savedImages = 0;       // # of HTTP requests eliminated (includes new s
 SpriteMe.savedSize = 0;         // # of bytes eliminated or gained (includes new sprites)
 SpriteMe.bgposZeroZero = 0;
 SpriteMe.bgposTotal = 0;
+SpriteMe.bIE = ( -1 != navigator.userAgent.indexOf('MSIE') );
 
 SpriteMe.hBgImages = null;  // a hash of BgImage objects
 SpriteMe.suggestedSpriteCntr = 0;
@@ -360,6 +546,7 @@ SpriteMe.showSpritemePanel = function() {
 	'<div style="float: right; text-align: right; margin-bottom: 4px; padding: 2px 0 2px 0; background: transparent;">' +
 	'<nobr><a class=spritemebuttonlink href="javascript:SpriteMe.makeAll()" style="color: white;" title="create all suggested sprites">make all</a>' +
 	'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.customSprite()" style="color: white;" title="create your own sprite">new sprite</a>' +
+	'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.exportCSS()" style="color: white;" title="export CSS changes">export CSS</a>' +
 	'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.toggleAll()" style="color: white;" title="expand/collapse all lists of elements">toggle all</a>' +
 	'&nbsp;&nbsp;<a href="http://spriteme.org/faq.php" target="_blank"><img style="background: #F1E7F1; vertical-align: bottom;" border=0 width=15 height=16 src="http://spriteme.org/images/help-15x16-transp.gif"></nobr></a>' + 
 	'</div>' +
@@ -400,9 +587,9 @@ SpriteMe.showSpritemePanel = function() {
 	    "A.spritemehoverlink:hover { text-decoration: underline; }\n" +
 	    ".spritemeimagecount { background: white; border: 1px solid black; padding: 0 4px 0 4px; font-weight: bold;}\n" + 
 	    "";
-	var spritemestyle = ( -1 != navigator.userAgent.indexOf('MSIE') ? SpriteMe.doc.createStyleSheet() : SpriteMe.doc.createElement('style') );
-	spritemestyle[ ( -1 != navigator.userAgent.indexOf('MSIE') ? 'cssText' : ( -1 != navigator.userAgent.indexOf('WebKit') ? 'innerText' : 'innerHTML' ) ) ] = sStyle;
-	if ( -1 == navigator.userAgent.indexOf('MSIE') ) {
+	var spritemestyle = ( SpriteMe.bIE ? SpriteMe.doc.createStyleSheet() : SpriteMe.doc.createElement('style') );
+	spritemestyle[ ( SpriteMe.bIE ? 'cssText' : ( -1 != navigator.userAgent.indexOf('WebKit') ? 'innerText' : 'innerHTML' ) ) ] = sStyle;
+	if ( ! SpriteMe.bIE ) {
 		SpriteMe.doc.getElementsByTagName('head')[0].appendChild(spritemestyle);
 	}
 
@@ -533,7 +720,7 @@ SpriteMe.doHover = function(imageUrl) {
 		spritemeimagediv.style.display = "none";
 		spritemeimagediv.src = imageUrl;
 		spritemeimagediv.innerHTML = '<div style="text-align: right; margin-bottom: 4px; font-size: 8pt;"><a class=spritemebuttonlink style="color: white;" href="javascript:SpriteMe.closeImage()">close</a></div><img style="background: url(http://spriteme.org/images/hash-bg.gif) repeat;" src="' + imageUrl + '">';
-		spritemeimagediv.style.top = ( ( -1 != navigator.userAgent.indexOf('MSIE') ? SpriteMe.doc.body.scrollTop : window.scrollY ) + 40) + 'px';
+		spritemeimagediv.style.top = ( ( SpriteMe.bIE ? SpriteMe.doc.body.scrollTop : window.scrollY ) + 40) + 'px';
 		spritemeimagediv.style.display = "block";
 	}
 };
@@ -555,7 +742,8 @@ SpriteMe.requestSprite = function(iSprite) {
 		return;
 	}
 
-	var sJson = sPrevJson = "";
+	var sJson = "";
+	var sPrevJson = "";
 	var iLeft = iTop = 0;
 	var iTotalHeight = iTotalWidth = 0;
 	for ( var i = 0; i < spriteObj.bgImages.length; i++ ) {
@@ -878,6 +1066,14 @@ SpriteMe.getStyleAndUrl = function(elem, prop, bGetUrl) {
 		}
 	}
 
+	if ( "backgroundPosition" === prop && SpriteMe.bIE ) {
+		var posX = SpriteMe.getStyleAndUrl(elem, 'backgroundPositionX', false);
+		posX = ( "left" == posX ? "0%" : ( "center" == posX ? "50%" : ( "right" == posX ? "100%" : posX ) ) );
+		var posY = SpriteMe.getStyleAndUrl(elem, 'backgroundPositionY', false);
+		posY = ( "top" == posY ? "0%" : ( "center" == posY ? "50%" : ( "bottom" == posY ? "100%" : posY ) ) );
+		val = posX + " " + posY;
+	}
+
 	if ( !bGetUrl ) {
 		return val;
 	}
@@ -903,7 +1099,13 @@ SpriteMe.setStyleAndUrl = function(elem, prop, val, bSetUrl) {
 
 	// TODO - opacity for IE is tricky
 	if ( "float" === prop ) {
-		prop = ( -1 != navigator.userAgent.indexOf('MSIE') ? "styleFloat" : "cssFloat" );
+		prop = ( SpriteMe.bIE ? "styleFloat" : "cssFloat" );
+	}
+	else if ( "backgroundPosition" === prop && SpriteMe.bIE) {
+		var aPos = val.split(' ');
+		SpriteMe.setStyleAndUrl(elem, 'backgroundPositionX', aPos[0], false);
+		SpriteMe.setStyleAndUrl(elem, 'backgroundPositionY', aPos[1], false);
+		return;
 	}
 
 	elem.style[prop] = val;
@@ -1289,7 +1491,7 @@ SpriteMe.Sprite.prototype = {
 
 	gatherSpriteData: function() {
 		for ( var i = 0; i < this.bgImages.length; i++ ) {
-			bgImage = this.bgImages[i];
+			var bgImage = this.bgImages[i];
 			bgImage.iSprite = this.iSprite;
 			this.bRepeatX = this.bRepeatX || bgImage.bRepeatX;
 			this.bRepeatY = this.bRepeatY || bgImage.bRepeatY;
@@ -1379,7 +1581,7 @@ SpriteMe.BgImage.prototype = {
 			this.marginTop = this.marginBottom = 0;
 		}
 
-		imgElem.backgroundPosition = imgElem.getBackgroundPosition();
+		imgElem.backgroundPosition = SpriteMe.getStyleAndUrl(imgElem.elem, "backgroundPosition");
 		/*
 		if ( "0% 0%" == imgElem.backgroundPosition  ||
 			 "0px 0px" == imgElem.backgroundPosition ||
@@ -1608,42 +1810,44 @@ SpriteMe.ImageElement.prototype = {
 		return sHtml;
 	},
 
+	getCssHtml: function(bRule) {
+		var sHtml = "";
+		if ( bRule ) {
+			sHtml = 
+				"<div style='margin-bottom: 8px;'>" + this.elem.tagName + 
+				( this.elem.id ? " id=" + this.elem.id : "" ) +
+				( this.elem.className ? " class=" + this.elem.className : "" ) +
+				", old background-image: " + this.oldBgImage +
+				"<br><code>&nbsp;&nbsp;&nbsp;&nbsp;{ <strong style='color: #000'>background-image: " + this.elem.style.backgroundImage +
+				"; background-position: " + this.elem.style.backgroundPosition +
+				"</strong>' }</code></div>\n";
+		}
+		else {
+			sHtml = 
+				"<div style='margin-bottom: 8px;'><code>&lt;" + this.elem.tagName + 
+				( this.elem.id ? " id=" + this.elem.id : "" ) +
+				( this.elem.className ? " class=" + this.elem.className : "" ) +
+				" style='<strong style='color: #000'>background-image: " + this.elem.style.backgroundImage +
+				"; background-position: " + this.elem.style.backgroundPosition +
+				"</strong>'&gt;" + this.elem.innerHTML.substring(0, 32) + "...</code></div>\n";
+		}
+
+		return sHtml;
+	},
+
 	spritify: function(url, bgImage) { // ImageElement
 		var aPos = this.calculateBackgroundPosition(bgImage);
 		if ( aPos ) {
-			this.setBackgroundPosition(aPos[0] + 'px', aPos[1] + 'px');
+			this.oldBgPos = SpriteMe.getStyleAndUrl(this.elem, "backgroundPosition");
+			SpriteMe.setStyleAndUrl(this.elem, 'backgroundPosition', aPos[0] + 'px ' + aPos[1] + 'px');
+			this.oldBgImage = SpriteMe.getStyleAndUrl(this.elem, "backgroundImage");
+			this.oldBgImageInline = this.elem.style.backgroundImage;
 			SpriteMe.setStyleAndUrl(this.elem, 'backgroundImage', url, true);
 		}
 		else {
 			SpriteMe.dprint(5, "SpriteMe.ImageElement.spritify: no regex match: " + this.backgroundPosition);
 			// TODO - deal with background-position that uses "px" values (other than "0px" which is handled above)
 			bgImage.unknownBgPos = this.backgroundPosition;
-		}
-	},
-
-	getBackgroundPosition: function() {
-		var bgPos;
-		if ( -1 != navigator.userAgent.indexOf('MSIE') ) {
-			var posX = SpriteMe.getStyleAndUrl(this.elem, 'backgroundPositionX', false);
-			posX = ( "left" == posX ? "0%" : ( "center" == posX ? "50%" : ( "right" == posX ? "100%" : posX ) ) );
-			var posY = SpriteMe.getStyleAndUrl(this.elem, 'backgroundPositionY', false);
-			posY = ( "top" == posY ? "0%" : ( "center" == posY ? "50%" : ( "bottom" == posY ? "100%" : posY ) ) );
-			bgPos = posX + " " + posY;
-		}
-		else {
-			bgPos = SpriteMe.getStyleAndUrl(this.elem, 'backgroundPosition', false);
-		}
-
-		return bgPos;
-	},
-
-	setBackgroundPosition: function(posX, posY) {
-		if ( -1 != navigator.userAgent.indexOf('MSIE') ) {
-			SpriteMe.setStyleAndUrl(this.elem, 'backgroundPositionX', posX, false);
-			SpriteMe.setStyleAndUrl(this.elem, 'backgroundPositionY', posY, false);
-		}
-		else {
-			SpriteMe.setStyleAndUrl(this.elem, 'backgroundPosition', posX + " " + posY, false);
 		}
 	},
 
@@ -1690,6 +1894,31 @@ SpriteMe.ImageElement.prototype = {
 		}
 
 		return undefined;
+	} // NO COMMA!
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// CssRule object
+//
+////////////////////////////////////////////////////////////////////////////////
+SpriteMe.CssRule = function(domRule, url) {
+	this.rule = domRule;
+	this.url = url;
+};
+
+
+SpriteMe.CssRule.prototype = {
+	getHtml: function() {
+		var sHtml =
+		    "<div style='margin-bottom: 8px;'><code>" + 
+		    this.rule.selectorText + " { <strong style='color: #000'>background-image: " + this.rule.style.backgroundImage +
+		    "; background-position: " + this.rule.style.backgroundPosition +
+		    "</strong> }</code></div>\n";
+
+		return sHtml;
 	} // NO COMMA!
 };
 
