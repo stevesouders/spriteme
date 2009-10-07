@@ -49,34 +49,11 @@ function spritemeFooter() {
 </div>
 
 <script type='text/javascript'>
-var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');
-var gaScript = document.createElement('script');
-gaScript.src = gaJsHost + 'google-analytics.com/ga.js';
-gaScript.onload = function() { 
-	addPageTracker();
-};
-gaScript.onreadystatechange = function() { 
-	if ( 'loaded' === gaScript.readyState ) {
-		addPageTracker();
-	}
-};
-var head = ( document.getElementsByTagName('head')[0] );
-if ( head ) {
-	head.appendChild(gaScript);
-}
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-10547666-1']);
+_gaq.push(['_trackPageview']);
 
-function addPageTracker() {
-	if ( 'undefined' === typeof(gaScript.onloadDone) ) {
-		gaScript.onloadDone = true;
-
-		try {
-			var pageTracker = _gat._getTracker('UA-10547666-1');
-			pageTracker._trackPageview();
-		} 
-		catch(err) {
-		}
-	}
-}
+document.documentElement.firstChild.appendChild(document.createElement('script')).src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/u/ga_beta.js';
 </script>
 OUTPUT;
 
