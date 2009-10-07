@@ -304,7 +304,7 @@ SpriteMe.showSpritemePanel = function() {
 	'<nobr><a class=spritemebuttonlink href="javascript:SpriteMe.makeAll()" style="color: white;" title="create all suggested sprites">make all</a>' +
 	'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.customSprite()" style="color: white;" title="create your own sprite">new sprite</a>' +
 	'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.exportCSS()" style="color: white;" title="export CSS changes">export CSS</a>' +
-	'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.toggleAll()" style="color: white;" title="expand/collapse all lists of elements">toggle all</a>' +
+	//'&nbsp;&nbsp;<a class=spritemebuttonlink href="javascript:SpriteMe.toggleAll()" style="color: white;" title="expand/collapse all lists of elements">toggle all</a>' +
 	'&nbsp;&nbsp;<a href="http://spriteme.org/faq.php" target="_blank"><img style="background: #F1E7F1; vertical-align: bottom;" border=0 width=15 height=16 src="http://spriteme.org/images/help-15x16-transp.gif"></nobr></a>' + 
 	'</div>' +
 	'<div style="margin-bottom: 6px; background: transparent;">' +
