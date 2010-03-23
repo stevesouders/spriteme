@@ -711,8 +711,10 @@ SpriteMe.exportCSS = function() {
 					}
 					SpriteMe.hBgPosRules[bgPos][ SpriteMe.hBgPosRules[bgPos].length ] = new SpriteMe.CssRule(rule, url);
 				}
-
 				if ( bgImage && "none" != bgImage ) {
+					if ( -1 != bgImage.indexOf("../") ) {
+						bgImage = SpriteMe.genFullUrl(bgImage, url);
+					}
 					SpriteMe.setStyleAndUrl(tempdiv, "backgroundImage", bgImage);
 					var bgImageKey = SpriteMe.getStyleAndUrl(tempdiv, "backgroundImage");
 					if ( "undefined" === typeof(SpriteMe.hBgImageRules[bgImageKey]) ) {
@@ -1081,6 +1083,23 @@ SpriteMe.getStyleAndUrl = function(elem, prop, bGetUrl) {
 	}
 
 	return val;
+};
+
+
+// Convert a relative URL to a full URL given a base URL.
+SpriteMe.genFullUrl = function(relUrl, baseUrl) {
+	var fullUrl = relUrl;
+
+	// assume only one ".." at the very beginning
+	iDotDot = relUrl.indexOf("../");
+	if ( -1 !== iDotDot ) {
+		var iSlash = baseUrl.lastIndexOf("/");
+		iSlash = baseUrl.lastIndexOf("/", iSlash-1);
+		var base = baseUrl.substring(0, iSlash+1);
+		fullUrl = relUrl.replace("../", base);
+	}
+
+	return fullUrl;
 };
 
 
