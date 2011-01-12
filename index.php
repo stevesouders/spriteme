@@ -53,7 +53,7 @@ Try it on this page:
 <div style="margin-left: 20px; margin-top: 4px; width: 600px;">
 Install SpriteMe by dragging this link to your bookmark toolbar or right-click to add it to your favorites:
 <div style="margin: 8px 8px 20px 80px;">
-<a style="font-size: 1.2em;" href="javascript:(function(){spritemejs=document.createElement('SCRIPT');spritemejs.type='text/javascript';spritemejs.src='<?php echo curPath() ?>spriteme.js';document.getElementsByTagName('head')[0].appendChild(spritemejs);})();">SpriteMe</a>
+<a style="font-size: 1.2em;" href="javascript:(function(){var%20spritemejs=document.createElement('SCRIPT');spritemejs.type='text/javascript';spritemejs.src='<?php echo curPath() ?>spriteme.js';document.getElementsByTagName('head')[0].appendChild(spritemejs);})();">SpriteMe</a>
 <img src="images/drag-this-link-107x32.png" width=107 height=32 style="vertical-align: bottom; margin-left: 8px;">
 </div>
 
