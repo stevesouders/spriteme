@@ -67,7 +67,7 @@ var gStep = -1;
 var gaSteps = [
 			   'hi!<p>welcome to the SpriteMe demo<p>(click "next" to continue)',
 			   'this tutorial shows how SpriteMe works<p>let\'s install SpriteMe and run it on this page',
-			   'install SpriteMe by dragging this link to<br>your bookmarks toolbar:<p><a href="javascript:(function(){spritemejs=document.createElement(\'SCRIPT\');spritemejs.type=\'text/javascript\';spritemejs.src=\'<?php echo curPath() ?>spriteme.js\';document.getElementsByTagName(\'head\')[0].appendChild(spritemejs);})();">SpriteMe</a><p>you can also right-click the link to add it to your favorites<p>if you get a warning, hit continue',
+			   'install SpriteMe by dragging this link to<br>your bookmarks toolbar:<p><a href="javascript:(function(){var%20spritemejs=document.createElement(\'SCRIPT\');spritemejs.type=\'text/javascript\';spritemejs.src=\'<?php echo curPath() ?>spriteme.js\';document.getElementsByTagName(\'head\')[0].appendChild(spritemejs);})();">SpriteMe</a><p>you can also right-click the link to add it to your favorites<p>if you get a warning, hit continue',
 			   'click the SpriteMe bookmark you just created<p>the SpriteMe panel will be displayed',
 			   testIfLoaded,
 			   'find <span class=fn>logo-64x64-04.png</span> - it\'s last in the list<p>click the expand icon (<img src="images/plus-9x9.png" width=18 height=18>) to see the DOM elements that use this image<p>each element\'s background-position and size is shown',
