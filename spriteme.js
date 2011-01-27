@@ -1353,6 +1353,10 @@ SpriteMe.fetchDomScript = function(url, callback) {
 
 
 SpriteMe.shareSavings = function() {
+	if ( ! confirm("This will post your savings and URL to a public page. Do you want to continue?") ) {
+		return;
+	}
+
 	new Image().src = "http://spriteme.org/results.php?url=" + escape(SpriteMe.doc.location.href) +
 	"&ib=" + SpriteMe.nBgImagesBefore + 
 	"&id=" + SpriteMe.savedImages + 
@@ -1364,7 +1368,9 @@ SpriteMe.shareSavings = function() {
 
 	var shareLink = SpriteMe.doc.getElementById('spritemeshare');
 	if ( shareLink ) {
-		shareLink.innerHTML = "<a href='http://spriteme.org/results.php' target='_blank' style='color: #404;'>shared</a>";
+		shareLink.href = 'http://spriteme.org/results.php';
+		shareLink.innerHTML = 'shared';
+		shareLink.target = '_blank';
 	}
 };
 
