@@ -691,6 +691,10 @@ SpriteMe.exportCSS = function() {
 				hRestrictedStylesheets[url] = true;
 			}
 
+			if ( null == aRules ) {
+				continue;
+			}
+
 			// Loop through each rule
 			for ( var r = 0, nRules = aRules.length; r < nRules; r++ ) {
 				var rule = aRules[r];
