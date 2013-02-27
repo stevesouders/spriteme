@@ -57,9 +57,6 @@ Install SpriteMe by dragging this link to your bookmark toolbar or right-click t
 <img src="images/drag-this-link-107x32.png" width=107 height=32 style="vertical-align: bottom; margin-left: 8px;">
 </div>
 
-<div style="margin-top: 8px; color: #A00;">
-October 7 - Latest release now supports export CSS feature.
-</div>
 </div>
 
 
