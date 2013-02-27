@@ -20,3 +20,10 @@ ExpiresActive On
 ExpiresDefault "access plus 1 week"
 Header set ETag ""
 </FilesMatch>
+
+# 2K daily hits on results.php
+deny from 89.45.194.39
+deny from 89.45.194.40
+# 500 daily hits on results.php
+deny from 188.215.55.218
+deny from 206.217.139.154
