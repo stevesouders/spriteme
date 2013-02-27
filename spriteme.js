@@ -704,7 +704,7 @@ SpriteMe.exportCSS = function() {
 				}
 				var bgPos = rule.style.backgroundPosition;
 				var bgImage = rule.style.backgroundImage;
-				if ( -1 != rule.selectorText.indexOf('spriteme') ) {
+				if ("undefined" !== typeof(rule.selectorText) && -1 != rule.selectorText.indexOf('spriteme') ) {
 					// don't analyze SpriteMe rules
 					continue;
 				}
