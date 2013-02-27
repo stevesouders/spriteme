@@ -25,11 +25,19 @@ echo spritemeHeader("faq");
 
 <div id=contents class=contents>
 
+<div>
 <?php 
 echo spritemeNav("faq");
 ?>
+</div>
 
 <br>
+
+<p style="margin-top: 2em;">
+Find out more about SpriteMe by reading <a href="http://www.stevesouders.com/blog/2009/09/14/spriteme/">these</a> 
+<a href="http://www.stevesouders.com/blog/2009/09/18/spriteme-part-2/">blog</a>
+<a href="http://www.stevesouders.com/blog/2009/09/21/spriteme-part-3/">posts</a> and watching this <a href="http://www.youtube.com/watch?v=pNfRL-TwzZY#t=27m21s">video</a>.
+</p>
 
 <style>
 #results { display: none; }
