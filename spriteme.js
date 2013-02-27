@@ -843,7 +843,7 @@ SpriteMe.exportCSS = function() {
 		exportWin.document.write("" +
 								 "<html><head><title>SpriteMe Export CSS</title><style>BODY { margin: 0; font-family: 'trebuchet ms', sans-serif; color: #222; font-size: 10.5pt; }#siteheader { padding: 8px 8px 0 12px; background: url(images/logo-64x64-04.png) repeat-x; height: 64px; }</style></head><body><div id=siteheader> <div style='width: 800px; font-size: 3em; color: #222;'><a href='http://spriteme.org' target='_blank'><img border=0 src='http://spriteme.org/images/spriteme-200x49-transp.gif' width=200 height=49 style='vertical-align: bottom;'></a> Export CSS</div></div>" +
 								 "<div style='color: #333; margin: 8px;'>" + 
-								 "<p>Here are the CSS changes you need to integrate back into your web site.</p><p style='margin-bottom: 4px;><span style='color: #A00;'>Make sure to download these sprite images to your own server. These URLs are temporary and will eventually be removed!</span> Replace these URLs with the URLs where you host the images.</p><ul style='margin-top: 0;'>" +
+								 "<p>Here are the CSS changes you need to integrate back into your web site.</p><p style='margin-bottom: 4px;'><span style='color: #A00;'>Make sure to download these sprite images to your own server. These URLs are temporary and will eventually be removed!</span> Replace these URLs with the URLs where you host the images.</p><ul style='margin-top: 0;'>" +
 								 sSpriteUrls + "</ul>" +
 								 sExport + 
 								 "</div>");
