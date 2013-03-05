@@ -158,7 +158,9 @@ OUTPUT;
 	}
 
 	$sHeadersRow = 
-		"<tr> <th>&nbsp;</th> <th>&nbsp;</th> <th>existing<br>sprites</th> <th>images<br>sprited</th> <th>sprites<br>created</th> <th colspan=2>change<br>in size</th> </tr>\n";
+		"<tr> <th>&nbsp;</th> " .
+		//"<th>&nbsp;</th> " .
+		"<th>existing<br>sprites</th> <th>images<br>sprited</th> <th>sprites<br>created</th> <th colspan=2>change<br>in size</th> </tr>\n";
 
 	$sHtml .= "<table border=0 class=savingstable cellspacing=0 cellpadding=0>\n" . $sHeadersRow;
 
@@ -179,7 +181,7 @@ OUTPUT;
 		$rowcntr++;
 		$sRow = "<tr" . ( 0 == ($rowcntr % 2) ? "" : " class=selrow" ) . ">" .
 			"<td class=sdate>" . date("D h:i a", $row['createdate']) . "</td>" .
-			"<td class=surl><a class=ahover href='$url' target='_blank'>" . shortenUrl($url) . "</a></td>" .
+			//"<td class=surl><a class=ahover href='$url' target='_blank'>" . shortenUrl($url) . "</a></td>" .
 			"<td class=snum style='text-align: center;'>$tb</td>";
 		if ( 1 >= $ib || 0 == $tc ) {
 			// No background images exist in the page - exclude this site from overall stats.
@@ -227,7 +229,7 @@ OUTPUT;
 		$sHtml .= "" .
 			"<tr>" .
 			"<td class=avg></td>" .
-			"<td class=avg style='text-align: right; padding-right: 20px;'>AVERAGE</td>" .
+			//"<td class=avg style='text-align: right; padding-right: 20px;'>AVERAGE</td>" .
 			"<td class='snum avg' style='text-align: center; padding-right: 0;'>" . myround($totalExistingSprites/$avgcntr) . "</td>" .
 			"<td class='snum avg' style='padding-right: 20px;'>" . myround($totalImages/$avgcntr) . "</td>" .
 			"<td class='snum avg' style='text-align: center; padding-right: 0;'>" . myround($totalSpritesCreated/$avgcntr) . "</td>" .
