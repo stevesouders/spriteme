@@ -33,7 +33,7 @@ if ( array_key_exists('ib', $_GET) && array_key_exists('id', $_GET) &&
 	}
 
 	// strip off all querystrings for privacy
-	if ( ereg("(http.*)\?", $url, $regs) ) {
+	if ( preg_match('/(http.*)\?/', $url, $regs) ) {
 		$url = $regs[1];
 	}
 
@@ -62,7 +62,7 @@ else if ( array_key_exists('id', $_GET) && array_key_exists('sd', $_GET) && arra
 	}
 
 	// strip off all querystrings for privacy
-	if ( ereg("(http.*)\?", $url, $regs) ) {
+	if ( preg_match('/(http.*)\?/', $url, $regs) ) {
 		$url = $regs[1];
 	}
 
@@ -428,7 +428,7 @@ function myround($num1) {
 
 
 function shortenUrl($url, $max = 50) {
-	//if ( ereg("(http[^\/]*\/\/[^\/]*\/[^\/]*\/).*(\/[^\/]*)$", $url, $regs) ) {
+	//if ( preg_match('/(http[^\/]*\/\/[^\/]*\/[^\/]*\/).*(\/[^\/]*)$/', $url, $regs) ) {
 
 	if ( $max < strlen($url) ) {
 		$iSlash = strpos($url, "/", 10);
