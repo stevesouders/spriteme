@@ -51,6 +51,7 @@ SpriteMe.SHORTREPEAT = 10;
 SpriteMe.ALREADYSPRITE = 11;
 SpriteMe.NOELEMSIZE = 12;
 SpriteMe.JPG = 13;
+SpriteMe.SVG = 14;
 SpriteMe.ERROR = -1;
 
 
@@ -507,7 +508,7 @@ SpriteMe.requestSprite = function(iSprite) {
 		var bgImage = spriteObj.bgImages[i];
 		iTop = ( spriteObj.bVertical ? iTop + bgImage.marginTop : bgImage.marginTop );
 		iLeft = ( !spriteObj.bVertical ? iLeft + bgImage.marginLeft : bgImage.marginLeft );
-		sJson += ( sJson ? ', ' : '' ) + '{"url":"' + bgImage.url + '", "top":' + iTop + ', "left":' + iLeft + '}';
+		sJson += ( sJson ? ', ' : '' ) + '{"url":"' + encodeURIComponent(bgImage.url) + '", "top":' + iTop + ', "left":' + iLeft + '}';
 		bgImage.spriteTop = iTop;
 		bgImage.spriteLeft = iLeft;
 		if ( spriteObj.bVertical ) {
@@ -518,7 +519,7 @@ SpriteMe.requestSprite = function(iSprite) {
 			else {
 				var nRepeats = parseInt(bgImage.resizeWidth/bgImage.width);
 				for ( var nr = 0; nr < nRepeats; nr++ ) {
-					sJson += ', {"url":"' + bgImage.url + '", "top":' + iTop + ', "left":' + (iLeft+((nr+1)*bgImage.width)) + '}';
+					sJson += ', {"url":"' + encodeURIComponent(bgImage.url) + '", "top":' + iTop + ', "left":' + (iLeft+((nr+1)*bgImage.width)) + '}';
 				}
 				iTotalWidth = ( iTotalWidth < bgImage.resizeWidth+bgImage.marginLeft+bgImage.marginRight ? 
 								bgImage.resizeWidth+bgImage.marginLeft+bgImage.marginRight : iTotalWidth );
@@ -1702,7 +1703,10 @@ SpriteMe.BgImage.prototype = {
 			return "repeats x AND y";
 		}
 		else if ( SpriteMe.JPG == this.iState ) {
-			return "jpeg";
+			return "jpegs aren't sprited";
+		}
+		else if ( SpriteMe.SVG == this.iState ) {
+			return "svgs aren't sprited";
 		}
 		else if ( SpriteMe.NOELEMSIZE == this.iState ) {
 			return "none of the elements are visible";
@@ -1753,6 +1757,9 @@ SpriteMe.BgImage.prototype = {
 		}
 		else if ( -1 != this.url.indexOf(".jpg") ) {
 			iState = SpriteMe.JPG;
+		}
+		else if ( -1 != this.url.indexOf(".svg") ) {
+			iState = SpriteMe.SVG;
 		}
 		else if ( ! this.bElemSize ) {
 			iState = SpriteMe.NOELEMSIZE;
