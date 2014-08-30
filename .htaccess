@@ -21,6 +21,8 @@ ExpiresDefault "access plus 1 week"
 Header set ETag ""
 </FilesMatch>
 
+#400 hits/day on images
+deny from 166.78.146.41
 # 2K daily hits on results.php
 deny from 89.45.194.39
 deny from 89.45.194.40
