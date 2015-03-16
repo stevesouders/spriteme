@@ -42,9 +42,9 @@ function spritemeFooter() {
 <hr style='margin-top: 80px; color: #A293B7;'>
 <div style='text-align: center; width: 800px; margin-bottom: 20px;'>
 <a style='margin-left: 16px;' href='.'>Home</a>
-<a style='margin-left: 16px;' href='http://code.google.com/p/spriteme/'>Code</a>
+<a style='margin-left: 16px;' href='https://github.com/stevesouders/spriteme'>Code</a>
 <a style='margin-left: 16px;' href='http://groups.google.com/group/spriteme'>Group</a>
-<a style='margin-left: 16px;' href='http://code.google.com/p/spriteme/issues/list'>Bugs</a>
+<a style='margin-left: 16px;' href='https://github.com/stevesouders/spriteme/issues'>Bugs</a>
 <a style='margin-left: 16px;' href='http://groups.google.com/group/spriteme/post'>Contact</a>
 </div>
 
