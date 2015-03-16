@@ -78,7 +78,7 @@ $gFaqs = array(
 					 "share"),
 
 			   array("Why aren't JPEG images sprited by SpriteMe?",
-					 "Currently, SpriteMe has no knowledge of the number of colors uesd by each image. It's important to stay within the 255 color limit to minimize image file size. Creating sprites that combine jpegs with other images typically results in a significant increase in file size. It's possible that jpegs could be combined together and with other truecolor images. See <a href='http://code.google.com/p/spriteme/issues/detail?id=69'>issue #69</a>.",
+					 "Currently, SpriteMe has no knowledge of the number of colors uesd by each image. It's important to stay within the 255 color limit to minimize image file size. Creating sprites that combine jpegs with other images typically results in a significant increase in file size. It's possible that jpegs could be combined together and with other truecolor images. See <a href='https://github.com/stevesouders/spriteme/issues/69'>issue #69</a>.",
 					 "jpeg"),
 
 			   array("category", "SpriteMe Gotchas"),
@@ -95,7 +95,7 @@ $gFaqs = array(
 					 "opensource"),
 
 			   array("Where can I find the code?",
-					 "On Google Code in the <a href='http://code.google.com/p/spriteme/'>spriteme</a> project.",
+					 "On Github in the <a href='https://github.com/stevesouders/spriteme'>spriteme</a> repo.",
 					 "code"),
 
 			   array("How do I contribute a patch to the project?",
@@ -103,11 +103,11 @@ $gFaqs = array(
 					 "patch"),
 
 			   array("Where's the current bug list?",
-					 "<a href='http://code.google.com/p/spriteme/issues/list'>bugs/issues</a>",
+					 "<a href='https://github.com/stevesouders/spriteme/issues'>bugs/issues</a>",
 					 "bugs"),
 
 			   array("How do I submit a bug?",
-					 "Go to the <a href='http://code.google.com/p/spriteme/issues/list'>issues list</a> to submit a new issue. You have to be logged in with a Google account.",
+					 "Go to the <a href='https://github.com/stevesouders/spriteme/issues'>issues list</a> to submit a new issue.",
 					 "bug"),
 
 			   array("Who created SpriteMe?",
